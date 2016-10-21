@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NW URL Shortener</title>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="https://fonts.gmirror.org/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+        .center {
+            text-align: center;
+        }
+
+        .center_in, .center > div, .center > table, .center > span {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .material-icons.md-18 { font-size: 18px; }
+        .material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
+        .material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
+
+
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">NW URL Shortener</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#admin">Admin</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+<div class="container">
+    {#    <div class="page-header">#}
+    {#        <h3 class="text-muted">NW URL Shortener</h3>#}
+    {#    </div>#}
+    {#    <div class="header">#}
+    {#        <ul class="nav nav-pills pull-right" role="tablist">#}
+    {#            <li role="presentation" class="active"><a href="#">Home</a></li>#}
+    {#            <li role="presentation"><a href="#">About</a></li>#}
+    {#            <li role="presentation"><a href="#">Contact</a></li>#}
+    {#        </ul>#}
+    {#        <h3 class="text-muted">NW URL Shortener</h3>#}
+    {#    </div>#}
+
+    <div class="center">
+        <h3>NW URL Shortener</h3>
+        <div>
+            <form>
+                <div class="form-group">
+                    <label class="control-label" for="long_url">Your URL:</label>
+                    <div class="input-group col-xs-12 col-sm-10 col-md-8 col-lg-6 center_in">
+                        <input type="text" class="form-control" id="long_url" placeholder="Your URL">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="shortened_url">Customize your short link (optional):</label>
+                    <div class="input-group input-group-sm col-xs-10 col-sm-5 col-md-4 col-lg-3 center_in">
+                        <span class="input-group-addon" id="url_prefix">https://nightwind.me/s/</span>
+                        <input type="text" class="form-control" id="shortened_url" aria-describedby="url_prefix">
+                        <span class="input-group-btn">
+                        <button type="button" class="btn btn-default">
+                            <i class="material-icons md-18 md-dark">content_copy</i>
+                        </button>
+                        </span>
+                    </div>
+
+                </div>
+                <button type="submit" class="btn btn-default">Shorten</button>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+</body>
+</html>
