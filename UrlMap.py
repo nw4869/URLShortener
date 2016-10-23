@@ -52,7 +52,10 @@ class UrlShortener:
         return self.shortenedUrls
 
     def id_available(self, id):
-        return id not in self.shortenedUrls
+        return id and id.strip() and id.strip() != '/'
+
+    def id_used(self, id):
+        self.id_available(id) and id not in self.shortenedUrls
 
     def put(self, id, url):
         shortened_url = ShortenedUrl(id, url)
@@ -92,19 +95,17 @@ class ShortenedUrlResource(Resource):
     def put(self, id):
         parser = reqparse.RequestParser()
         parser.add_argument('url', help='url')
-        parser.add_argument('token', required=True)
         args = parser.parse_args()
         url = args.url
+
+        if url_shortener.id_used(id):
+            abort(400)
 
         url_shortener.put(id, url)
         return ShortenedUrl(id, url), 201
 
     @authenticate
     def delete(self, id):
-        parser = reqparse.RequestParser()
-        parser.add_argument('token', required=True)
-        args = parser.parse_args()
-
         if url_shortener.get(id) is None:
             abort(404)
 
@@ -124,10 +125,10 @@ class ShortenedUrlsResource(Resource):
         url = args.url
 
         id = args.id
-        if id is not None and not url_shortener.id_available(id):
+        if id and not url_shortener.id_used(id):
             abort(400, message='\'%s\' is not available.' % id)
 
-        if id is None:
+        if not id:
             while True:
                 id = uuid4().hex[:4]
                 if url_shortener.id_available(id):
@@ -137,8 +138,8 @@ class ShortenedUrlsResource(Resource):
         return ShortenedUrl(id, url), 201
 
 url_shortener = UrlShortener()
-api.add_resource(ShortenedUrlResource, '/api/v1/shortened_urls/<string:id>')
-api.add_resource(ShortenedUrlsResource, '/api/v1/shortened_urls')
+api.add_resource(ShortenedUrlResource, '/api/v1/shortened_urls/<string:id>', endpoint='shortened_url')
+api.add_resource(ShortenedUrlsResource, '/api/v1/shortened_urls', endpoint='shortened_urls')
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -155,4 +156,4 @@ def shortened_url_redirect(id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run('0.0.0.0', 5000, debug=True)

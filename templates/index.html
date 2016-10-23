@@ -6,7 +6,7 @@
     <title>NW URL Shortener</title>
     <!-- 新 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
-    <link href="https://fonts.gmirror.org/icon?family=Material+Icons" rel="stylesheet">
+{#    <link href="https://fonts.lug.ustc.edu.cn/icon?family=Material+Icons" rel="stylesheet">#}
 
     <style>
         .center {
@@ -18,9 +18,17 @@
             margin-right: auto;
         }
 
-        .material-icons.md-18 { font-size: 18px; }
-        .material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
-        .material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
+{#        .material-icons.md-18 {#}
+{#            font-size: 18px;#}
+{#        }#}
+{##}
+{#        .material-icons.md-dark {#}
+{#            color: rgba(0, 0, 0, 0.54);#}
+{#        }#}
+{##}
+{#        .material-icons.md-dark.md-inactive {#}
+{#            color: rgba(0, 0, 0, 0.26);#}
+{#        }#}
 
 
     </style>
@@ -41,7 +49,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="#">Home</a></li>
+                <li class="active"><a href="{{ url_for('home') }}">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#admin">Admin</a></li>
             </ul>
@@ -50,42 +58,32 @@
 </nav>
 
 <div class="container">
-    {#    <div class="page-header">#}
-    {#        <h3 class="text-muted">NW URL Shortener</h3>#}
-    {#    </div>#}
-    {#    <div class="header">#}
-    {#        <ul class="nav nav-pills pull-right" role="tablist">#}
-    {#            <li role="presentation" class="active"><a href="#">Home</a></li>#}
-    {#            <li role="presentation"><a href="#">About</a></li>#}
-    {#            <li role="presentation"><a href="#">Contact</a></li>#}
-    {#        </ul>#}
-    {#        <h3 class="text-muted">NW URL Shortener</h3>#}
-    {#    </div>#}
 
     <div class="center">
+        <div id="message_box"></div>
         <h3>NW URL Shortener</h3>
         <div>
-            <form>
+            <form action="javascript:void(0);">
                 <div class="form-group">
                     <label class="control-label" for="long_url">Your URL:</label>
                     <div class="input-group col-xs-12 col-sm-10 col-md-8 col-lg-6 center_in">
                         <input type="text" class="form-control" id="long_url" placeholder="Your URL">
                     </div>
                 </div>
-                <div class="form-group">
+                <div id="shortened_url_form_group" class="form-group">
                     <label class="control-label" for="shortened_url">Customize your short link (optional):</label>
                     <div class="input-group input-group-sm col-xs-10 col-sm-5 col-md-4 col-lg-3 center_in">
                         <span class="input-group-addon" id="url_prefix">https://nightwind.me/s/</span>
                         <input type="text" class="form-control" id="shortened_url" aria-describedby="url_prefix">
-                        <span class="input-group-btn">
-                        <button type="button" class="btn btn-default">
-                            <i class="material-icons md-18 md-dark">content_copy</i>
-                        </button>
-                        </span>
+{#                        <span class="input-group-btn">#}
+{#                        <button type="button" class="btn btn-default">#}
+{#                            <i class="material-icons md-18 md-dark">content_copy</i>#}
+{#                        </button>#}
+{#                        </span>#}
                     </div>
 
                 </div>
-                <button type="submit" class="btn btn-default">Shorten</button>
+                <button id="submit" type="submit" class="btn btn-primary btn-lg">Shorten</button>
             </form>
 
         </div>
@@ -98,5 +96,31 @@
 
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+<script type="application/javascript">
+    function submit() {
+        var url = $('#long_url');
+        var id = $('#shortened_url');
+        $.post('{{ url_for('shortened_urls') }}', {url: url.val(), id: id.val()}, function (data) {
+            id.val('');
+            $('#message_box').empty().append(make_message('Success! Your shortened URL is: '
+                    + '{{ request.url_root }}' + data.id, 'success'));
+        }).error(function (data) {
+            $('#message_box').empty().append(make_message('Oops! ' + data.message, 'danger'));
+        })
+    }
+
+    function make_message(message, type) {
+        return '<div class="alert alert-' + type + '">\
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>'
+                + message +
+                '</div>'
+    }
+
+    $(document).ready(function () {
+        $('#submit').click(submit)
+    })
+</script>
+
 </body>
 </html>
